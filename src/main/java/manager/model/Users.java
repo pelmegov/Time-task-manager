@@ -7,12 +7,11 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "\"USERS\"")
-public class User {
+public class Users {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    private String firstName;
-    private String lastName;
+    private String username;
+    private String password;
 }
