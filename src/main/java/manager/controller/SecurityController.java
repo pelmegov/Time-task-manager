@@ -1,9 +1,11 @@
 package manager.controller;
 
 
+import manager.exception.AccountWithSameLoginAlreadyExist;
 import manager.model.Users;
-import manager.repository.ApplicationRepository;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import manager.service.AccountService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,18 +13,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SecurityController {
 
-    private ApplicationRepository applicationUserRepository;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private AccountService accountService;
 
-    public SecurityController(ApplicationRepository applicationUserRepository,
-                              BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.applicationUserRepository = applicationUserRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    public SecurityController(AccountService accountService) {
+        this.accountService = accountService;
     }
 
     @PostMapping("/sign-up")
-    public void signUp(@RequestBody Users user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        applicationUserRepository.save(user);
+    public ResponseEntity signUp(@RequestBody Users user) {
+        try {
+            accountService.register(user);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (AccountWithSameLoginAlreadyExist accountWithSameLoginAlreadyExist) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
     }
 }
