@@ -27,8 +27,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     public void register(Users user) throws AccountWithSameLoginAlreadyExist {
-        if (accountRepository.findByUsername(user.getUsername()) != null)
-            throw new AccountWithSameLoginAlreadyExist(user.getUsername());
+        if (accountRepository.findByEmail(user.getEmail()) != null)
+            throw new AccountWithSameLoginAlreadyExist(user.getEmail());
         String passHash = bCryptPasswordEncoder.encode(user.getPassword());
         user.setPassword(passHash);
         accountRepository.save(user);
@@ -36,10 +36,10 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Users applicationUser = accountRepository.findByUsername(username);
+        Users applicationUser = accountRepository.findByEmail(username);
         if (applicationUser == null) {
             throw new UsernameNotFoundException(username);
         }
-        return new User(applicationUser.getUsername(), applicationUser.getPassword(), emptyList());
+        return new User(applicationUser.getEmail(), applicationUser.getPassword(), emptyList());
     }
 }

@@ -1,6 +1,7 @@
 package manager.model;
 
 import lombok.Data;
+import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
 
@@ -12,6 +13,7 @@ public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String username;
+    @Email
+    private String email;
     private String password;
 }
