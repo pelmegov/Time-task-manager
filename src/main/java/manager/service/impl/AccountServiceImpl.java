@@ -1,11 +1,11 @@
 package manager.service.impl;
 
 import manager.exception.AccountWithSameLoginAlreadyExist;
-import manager.model.Users;
+import manager.model.SpringUser;
+import manager.model.User;
 import manager.repository.AccountRepository;
 import manager.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,7 +26,7 @@ public class AccountServiceImpl implements AccountService {
         this.accountRepository = accountRepository;
     }
 
-    public void register(Users user) throws AccountWithSameLoginAlreadyExist {
+    public void register(User user) throws AccountWithSameLoginAlreadyExist {
         if (accountRepository.findByEmail(user.getEmail()) != null)
             throw new AccountWithSameLoginAlreadyExist(user.getEmail());
         String passHash = bCryptPasswordEncoder.encode(user.getPassword());
@@ -36,10 +36,10 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Users applicationUser = accountRepository.findByEmail(username);
+        User applicationUser = accountRepository.findByEmail(username);
         if (applicationUser == null) {
             throw new UsernameNotFoundException(username);
         }
-        return new User(applicationUser.getEmail(), applicationUser.getPassword(), emptyList());
+        return new SpringUser(applicationUser.getEmail(), applicationUser.getPassword(), emptyList());
     }
 }

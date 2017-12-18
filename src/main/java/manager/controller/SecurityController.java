@@ -2,7 +2,7 @@ package manager.controller;
 
 
 import manager.exception.AccountWithSameLoginAlreadyExist;
-import manager.model.Users;
+import manager.model.User;
 import manager.service.AccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ public class SecurityController {
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity signUp(@RequestBody Users user,
+    public ResponseEntity signUp(@RequestBody User user,
                                  final BindingResult result) {
         if (result.hasErrors()){
             return new ResponseEntity(HttpStatus.BAD_REQUEST);

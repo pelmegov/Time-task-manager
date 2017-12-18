@@ -1,7 +1,7 @@
 package manager.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import manager.model.Users;
+import manager.model.User;
 import manager.repository.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,7 +46,7 @@ public class JWTAuthorizationTest {
 
     @Before
     public void saveUser() {
-        final Users user = new Users();
+        final User user = new User();
         user.setEmail("user@user.com");
         user.setPassword(passwordEncoder.encode("pass"));
         userRepository.save(user);
@@ -55,11 +55,11 @@ public class JWTAuthorizationTest {
     @Test
     public void authorizationUserSuccessfulFindUsersTest() throws Exception {
         final String token = getToken(login("user@user.com", "pass").andReturn());
-        mockMvc.perform(get("/user").header("Authorization", token)).andExpect(status().isOk());
+        mockMvc.perform(get("/users").header("Authorization", token)).andExpect(status().isOk());
     }
 
     private ResultActions login(String email, String password) throws Exception {
-        final Users user = new Users();
+        final User user = new User();
         user.setEmail(email);
         user.setPassword(password);
         return mockMvc.perform(
