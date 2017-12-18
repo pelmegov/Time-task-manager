@@ -1,9 +1,9 @@
 package manager.repository;
 
-import manager.model.Users;
+import manager.model.User;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface AccountRepository extends PagingAndSortingRepository<Users, Long> {
+public interface AccountRepository extends PagingAndSortingRepository<User, Long> {
 
-    Users findByEmail(String email);
+    User findByEmail(String email);
 }
